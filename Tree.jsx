@@ -1278,33 +1278,60 @@ export default class Tree extends Component {
       const { nodes } = this.state;
       var child = this.getChildNodes(node);
       
-      if(level.length == 1 && child != null){
+      if(level.length == 1){
        
         nodes[index].isCheck = !nodes[index].isCheck; 
         if(child != null){
         child.map((c, i) => {
-          console.log("  1")
-          var lv = level;
-          this.hanfleClick(c, i, lv.concat(i)) 
+          nodes[index].Settings[i].isCheck = nodes[index].isCheck;
+          var subChild = this.getChildNodes(nodes[index].Settings[i]);
+          if(subChild != null){
+            subChild.map((d, j) => {
+              nodes[index].Settings[i].FunctionKeys[j].isCheck = nodes[index].isCheck;
+              var supsubChil =  this.getChildNodes(nodes[index].Settings[i].FunctionKeys[j]);
+              if(supsubChil != null){
+                supsubChil.map((e, h) => {
+                  nodes[index].Settings[i].FunctionKeys[j].FunctionKeys[h].isCheck = nodes[index].isCheck;
+                 
+                })}
+            })
+
+          }
         })
         }
       }
       if(level.length == 2 ){
-      if(( nodes[level[0]].Settings[level[1]])) {
+        nodes[level[0]].Settings[index].isCheck = !nodes[level[0]].Settings[index].isCheck;
+        
+        if(child != null){
+          child.map((c, i) => {
+            nodes[level[0]].Settings[index].FunctionKeys[i].isCheck = nodes[level[0]].Settings[index].isCheck;
+                var supsubChil =  this.getChildNodes(nodes[level[0]].Settings[index].FunctionKeys[i]);
+                if(supsubChil != null){
+                  supsubChil.map((e, h) => {
+                    nodes[level[0]].Settings[index].FunctionKeys[i].FunctionKeys[h].isCheck = nodes[level[0]].Settings[index].isCheck;
+              })
   
-        nodes[level[0]].Settings[level[1]].isCheck = !nodes[level[0]].Settings[level[1]].isCheck;
-        console.log("defi")
+            }
+          })
+        }
       }
-      
-       if(child != null){
-        var lv = level;
-        child.map((c, i) => this.hanfleClick(c, i, lv.concat(i)))
-       }
-      
-    //   child.map((c, i) => nodes[index].Settings[i].isCheck = !nodes[index].Settings[i].isCheck )
+      if(level.length == 3){
+        nodes[level[0]].Settings[level[1]].FunctionKeys[index].isCheck = !nodes[level[0]].Settings[level[1]].FunctionKeys[index].isCheck
+        
+        if(child != null){
+          child.map((c, i) => {
+            nodes[level[0]].Settings[level[1]].FunctionKeys[index].FunctionKeys[i].isCheck = nodes[level[0]].Settings[level[1]].FunctionKeys[index].isCheck;
+          })
+        }
+
       }
-     
-      console.log("setState")
+
+      
+      if(level.length == 4){
+        nodes[level[0]].Settings[level[1]].FunctionKeys[level[2]].FunctionKeys[index].isCheck = !nodes[level[0]].Settings[level[1]].FunctionKeys[level[2]].FunctionKeys[index].isCheck
+      }
+
       this.setState({ nodes });
     }
 
